@@ -18,7 +18,7 @@ def add_stuff
 end # => nil
 add_stuff # => TypeError    This proves that Ruby is dynamically typed
 
-# Types, types, types. More about Ruby's typing system:
+# Types, types, types. More about Ruby's type system:
 #   Ruby is duck-typed, meaning that if two objects of different
 #   classes have the same method signature, then they can be used together
 i = 0
@@ -39,3 +39,23 @@ CONSTANTS = 'are defined like this' # they are immutable
 [1, "two", 3] # is perfectly valid
 Array.new     # remember, these are objects, and objects can be instantiated
               #   with .new()
+
+# We saw a bit of defining a function earlier in add_stuff
+# Notice that you didn't need to specify parameter types, return types, or even a return statement
+def be_truthful
+  42
+  true    # The last expression is always the one that gets returned
+end
+
+
+# TODO: Array accessors
+cars = ['ford', 'toyota', 'subaru']
+cars[0]     # => "ford"
+cars[2]     # => "subaru"
+cars[-1]    # => "subaru"
+cars[-4]    # => nil
+cars[9001]  # => nil
+cars[1..2]  # => ["toyota", "subaru"]
+cars[1..2]  # => ["toyota", "subaru"]
+cars[0...2] # => ["ford", "toyota"]
+cars.[](0...2)# => ["ford", "toyota"]

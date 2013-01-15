@@ -29,3 +29,13 @@ def add_stuff
   4 + 4.0
 end # => nil
 add_stuff # => TypeError    This proves that Ruby is dynamically typed
+
+# Types, types, types. More about Ruby's typing system:
+#   Ruby is duck-typed, meaning that if two objects of different
+#   classes have the same method signature, then they can be used together
+i = 0
+a = ['100', 100.0, '50', 50.0]
+while i < a.size
+  puts a[i].to_i
+  i = i + 1
+end

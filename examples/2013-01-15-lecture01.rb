@@ -14,7 +14,7 @@
 4 + 4.0     # => 8.0      this works because of type coercion
 # What about this though?
 def add_stuff
-  4 + 4.0
+  4 + "foo"
 end # => nil
 add_stuff # => TypeError    This proves that Ruby is dynamically typed
 

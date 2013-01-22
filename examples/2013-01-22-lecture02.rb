@@ -66,6 +66,40 @@ d = Base.new
 # puts d.x # => undefined method `x' for ... (NoMethodError)
 puts d.instance_variable_get :@x # => 10
 
+## Class Variable
+module T
+  @@foo = 'bar'
+
+  def self.set(x)
+    @@foo = x
+  end
+
+  def self.get
+    @@foo
+  end
+end
+
+p T.get         # => 'bar'
+T.set('fubar')
+p T::get        # => 'fubar'
+
+## Inheritance
+
+class Base
+  def initialize()
+    @x = 10
+  end
+end
+
+class Derived < Base
+  def x
+    @x = 20
+  end
+end
+
+d = Derived.new
+p d.x # => 20
+
 ## Tree Implementation
 
 class Tree
@@ -211,3 +245,109 @@ end
 # sum:5 i:3 sum+i:8
 # sum:8 i:4 sum+i:12
 # sum:12 i:1 sum+i:13
+
+# ---------------------------------------------------------------------------- #
+
+## Open Classes
+class NilClass
+  def blank?
+    true
+  end
+end
+
+class String
+  def blank?
+    self.size == 0
+  end
+end
+
+["", "person", nil].each do |element|
+  puts element unless element.blank?
+end
+
+# ---------------------------------------------------------------------------- #
+
+## method_missing
+
+class Roman
+  def self.method_missing name, *args
+    roman = name.to_s
+    roman.gsub!("IV", "IIII")
+    roman.gsub!("IX", "VIIII")
+    roman.gsub!("XL", "XXXX")
+    roman.gsub!("XC", "LXXXX")
+    (roman.count("I") + roman.count("V")*5 + roman.count("X")*10
+     + roman.count("L")*50 + roman.count("C")*100)
+  end
+end
+puts Roman.X    # 10
+puts Roman.XC   # 90
+puts Roman.XII  # 12
+puts Roman.IX   # 9
+
+# ---------------------------------------------------------------------------- #
+
+## The inheritance/macro approach
+
+class Person
+  attr_accessor :name
+  def self.can_speak  # This is a class method! Notice the self.
+    define_method 'speak' do  # an instance method
+      puts "I can talk, my name is #{@name}!"
+    end
+  end
+
+  def initialize(name)
+    @name = name
+  end
+end
+
+class Guy < Person
+  can_speak
+end
+
+class ShyGuy < Person
+end
+
+john = Guy.new('John')
+bob = ShyGuy.new('Bob')
+john.methods.include?(:speak)   # true
+bob.methods.include?(:speak)    # false
+
+# ---------------------------------------------------------------------------- #
+
+## The module approach
+
+module Person
+  attr_accessor :name
+  def self.included(base) # included is invoked whenever a module is included; base is implicit
+    base.extend ClassMethods  # extend will add the methods defined in ClassMethods as class methods
+  end
+  module ClassMethods
+    def can_speak
+      include InstanceMethods # This includes all the instance methods
+    end
+  end
+  module InstanceMethods
+    def speak
+      puts "I can talk, my name is #{@name}!"
+    end
+  end
+  def initialize(name)
+    @name = name
+  end
+end
+
+class Guy
+  include Person
+  can_speak
+end
+
+class ShyGuy
+  include Person
+end
+
+john = Guy.new('John')
+bob = ShyGuy.new('Bob')
+john.methods.include?(:speak)   # true
+bob.methods.include?(:speak)    # false

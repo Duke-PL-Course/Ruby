@@ -153,8 +153,8 @@ criteria = {
     :credits => {
       :gte => 0.5
   }],
-  :select => [ :number, :name],
-  :sort_by => [ :number]
+  :select => [:number, :name],
+  :sort_by => :number
 }
 ```
 

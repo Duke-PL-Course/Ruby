@@ -1,3 +1,3 @@
-def fib(n, n0 = 1, n1 = 1)
+def fib(n, n1 = 1, n2 = 1)
   # ...
 end

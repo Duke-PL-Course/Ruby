@@ -138,7 +138,7 @@ data = [{
   :department => 'CS',
   :number => 82,
   :name => 'The Internet Seminar',
-  :credits: => 0.5
+  :credits => 0.5
 }, {
   :department => 'ECE',
   :number => 52,

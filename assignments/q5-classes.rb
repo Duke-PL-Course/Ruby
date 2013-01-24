@@ -36,7 +36,7 @@ def queryClasses(data, criteria)
   end
 
   # Step 3: Limit
-  if (limit = criteria[:limit] && limit > 0)
+  if limit = criteria[:limit] and limit > 0 # NOTE: we use `and` here because we want assignment first
     new_data = new_data.take limit
   end
 

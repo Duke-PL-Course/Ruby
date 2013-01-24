@@ -20,7 +20,7 @@ end
 Example Tests:
 ```ruby
 fib(1) # => 1
-fib(5) # => 8
+fib(6) # => 8
 fib(11, 0) # => 55
 ```
 

@@ -156,6 +156,8 @@ criteria = {
   :select => [:number, :name],
   :sort_by => :number
 }
+
+queryClasses(data, criteria)
 ```
 
 Expected Output:

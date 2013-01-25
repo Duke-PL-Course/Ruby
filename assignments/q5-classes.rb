@@ -17,12 +17,8 @@ def queryClasses(data, criteria)
 
     # Overall filter of the courses
     new_data = new_data.select do |course|  # NOTE: select is a filter
-      # First go through all filters
-      criteria[:filter].inject(true) do |pass, filter|
-        # filter at this point looks like {:field => {:op => value, :op2 => value2}}
-        field = filter.keys[0]
-        operations = filter[field]
-        # Now go through all sub clauses/operators in each filter
+      criteria[:filter].inject(true) do |pass, (field, operations)|
+        # Now go through all sub-clauses/operations in each filter
         pass && operations.inject(true) do |inner_pass, (op, v)|
           inner_pass && op2block[op].call(course[field], v)
         end

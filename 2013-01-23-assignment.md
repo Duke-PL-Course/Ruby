@@ -146,14 +146,14 @@ data = [{
   # Note that the :credits key-value pair is missing
 }]
 criteria = {
-  :filter => [{
+  :filter => {
     :number => {
       :gt => 80
     },
     :credits => {
       :gte => 0.5
     }
-  }],
+  },
   :select => [:number, :name],
   :sort_by => :number
 }

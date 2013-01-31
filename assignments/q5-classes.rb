@@ -28,7 +28,9 @@ def queryClasses(data, criteria)
 
   # Step 2: Sort By
   if (field = criteria[:sort_by])
-    new_data.sort_by! { |course| course[field] }
+    has_crit = (new_data.select { |course| !course[field].nil? }).sort_by! { |course| course[field] }
+    no_crit = (new_data.select { |course| course[field].nil? })
+    new_data = has_crit + no_crit
   end
 
   # Step 3: Limit
@@ -46,3 +48,4 @@ def queryClasses(data, criteria)
   # Return transformed data
   new_data
 end
+

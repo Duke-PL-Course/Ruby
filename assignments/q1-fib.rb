@@ -30,3 +30,23 @@ def fibRecursive(n, n1 = 1, n2 = 1)
     fibRecursive(n-1, n1, n2) + fibRecursive(n-2, n1, n2)
   end
 end
+
+def fibTailRecursive(n, n1 = 1, n2 = 1)
+  return n1 if n <= 1
+  return n2 if n == 2
+  return fib(n - 1, n2, n1 + n2)
+end
+
+def fibIt(n, n1 = 1, n2 = 1)
+  (2..n).each {
+    n1, n2 = n2, n1 + n2
+  }
+  return n1
+end
+
+def fibItLoop(n, n1 = 1, n2 = 1)
+  for i in 2..n
+    n1, n2 = n2, n1 + n2
+  end
+  return n1
+end

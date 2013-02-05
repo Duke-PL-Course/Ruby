@@ -1,3 +1,4 @@
+
 def queryClasses(data, criteria)
   # Create a clone of data so we don't cause side effects
   new_data = data.clone
@@ -49,3 +50,76 @@ def queryClasses(data, criteria)
   new_data
 end
 
+def queryClasses(data, criteria)
+  comparators = {
+    :gt => lambda {|value, condition| value > condition },
+    :gte => lambda {|value, condition| value >= condition },
+    :lt => lambda {|value, condition| value < condition },
+    :lte => lambda {|value, condition| value <= condition },
+    :eq => lambda {|value, condition| value == condition },
+    :neq => lambda {|value, condition| value != condition },
+    :exists => lambda {|value, condition| !(value.nil? ^ condition) }
+  }
+
+  filter = criteria[:filter]
+  sort_by = criteria[:sort_by]
+  select = criteria[:select]
+
+  if not filter.nil?
+    data = data.select { |item|
+      filter.all? { |attr, conditions|
+        conditions.all? { |op, condition|
+          comparators[op].call(item[attr], condition)
+        }
+      }
+    }
+  end
+
+  if not sort_by.nil?
+    data = data.sort_by { |item|
+      item[sort_by]
+    }
+  end
+
+  if not select.nil?
+    data = data.map { |item|
+      item.reject {|key, value|
+        !select.include?(key)
+      }
+    }
+  end
+
+  data[0...(criteria[:limit] || data.size)]
+end
+
+data = [{
+  :department => 'CS',
+  :number => 101,
+  :name => 'Intro to Computer Science',
+  :credits => 1.00
+}, {
+  :department => 'CS',
+  :number => 82,
+  :name => 'The Internet Seminar',
+  :credits => 0.5
+}, {
+  :department => 'ECE',
+  :number => 52,
+  :name => 'Intro to Digital Logic'
+  # Note that the :credits key-value pair is missing
+}]
+criteria = {
+  :filter => {
+    :number => {
+      :gt => 80
+    },
+    :credits => {
+      :gte => 0.5
+    }
+  },
+  :select => [:number, :name],
+  :sort_by => :number
+}
+
+p queryClasses(data, criteria)
+p data

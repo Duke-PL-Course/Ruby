@@ -2,8 +2,13 @@ class Tree
   attr_accessor :children, :node_name
 
   def initialize(name, children=[])
-    @children = children
-    @node_name = name
+    @children = []
+    if tree.size == 1
+      @node_name = tree.keys[0]
+      tree[@node_name].each do |child, grandchildren|
+        @children << Tree.new({ child => grandchildren })
+      end
+    end
   end
 
   def visit_all(&block)
